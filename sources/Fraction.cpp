@@ -1,23 +1,43 @@
 #include "Fraction.hpp"
 #include <stdio.h>
+#include <iostream>
 
 using namespace std;
 
-/// @brief 
+
 namespace ariel{
 
-    // Fraction::Fraction(){
+    Fraction::Fraction(): numerator(0) , denominator(1){
 
-    //     Fraction(this->numerator, this->denominator);
-    // }
-
-    Fraction::Fraction(int numerator, int denominator){
-        this->numerator = numerator;
-        this->denominator = denominator;
     }
 
-    Fraction::Fraction(float num){
+    Fraction::Fraction(int n, int d):numerator(n), denominator(d){
+        if(d == 0){
+            throw std::invalid_argument("Cant divide by 0");
+        }
+        this->reduce();
+    }
 
+    Fraction::Fraction(float num) : numerator(int(num*1000)) , denominator(1000){
+
+            this->reduce();
+    }
+
+    int Fraction::gcd(int a, int b) {
+        if (b == 0) {
+            return a;
+        }
+        return gcd(b, a % b);
+    }
+
+    void Fraction::reduce(){
+        if (this->denominator < 0) {
+            numerator = -numerator;
+            denominator = -denominator;
+        }
+        int gcd = this->gcd(this->getNumerator(), this->getDenominator());
+        this->setNumerator(this->numerator / gcd);
+        this->setDenominator(this->denominator / gcd);
     }
 
     int Fraction::getNumerator(){
@@ -33,6 +53,10 @@ namespace ariel{
     }
     
     void Fraction::setDenominator(int num2){
+        if(num2 == 0){
+            throw std::invalid_argument("cant divide by 0");
+        }
+        
         this->denominator = num2;
     }
 
@@ -43,14 +67,14 @@ namespace ariel{
         return Fraction(1,4);
     }
 
-    float Fraction::operator+ (float num){
+    Fraction Fraction::operator+ (float num){
 
-        return 1;
+        return Fraction(1,2);
     }
 
-    float operator+ (float num, Fraction& fraction){
+    Fraction operator+ (float num, Fraction& fraction){
 
-        return 1;
+        return Fraction(1,2);
     }
 
 
@@ -60,14 +84,14 @@ namespace ariel{
         return Fraction(1,2);
     }
 
-    float Fraction::operator- (float num){
+    Fraction Fraction::operator- (float num){
 
-        return 1;
+        return Fraction(1,2);
     }
 
-    float operator- (float num, Fraction& fraction){
+    Fraction operator- (float num, Fraction& fraction){
 
-        return 1;
+        return Fraction(1,2);
     }
 
 
@@ -77,14 +101,14 @@ namespace ariel{
         return Fraction(1,2);
     }
 
-    float Fraction::operator* (float num){
+    Fraction Fraction::operator* (float num){
 
-        return 1;
+        return Fraction(1,2);
     }
 
-    float operator* (float num, Fraction& fraction){
+    Fraction operator* (float num, Fraction& fraction){
 
-        return 0;
+        return Fraction(1,2);
     }
 
     
@@ -94,14 +118,14 @@ namespace ariel{
         return Fraction(1,4);
     }
 
-    float Fraction::operator/ (float num){
+    Fraction Fraction::operator/ (float num){
 
-        return 1;
+        return Fraction(1,2);
     }
 
-    float operator/ (float num, Fraction& fraction){
+    Fraction operator/ (float num, Fraction& fraction){
 
-        return 1;
+        return Fraction(1,2);
     }
 
 
@@ -111,11 +135,35 @@ namespace ariel{
         return false;
     }
 
+    bool Fraction::operator== (float num) const{
+
+        return false;
+    }
+
+    bool operator== (float num ,const Fraction& other_fraction){
+
+        return false;
+    }
+
+
+
 
     bool Fraction::operator> (const Fraction& other_fraction) const{
 
         return false;
     }
+
+    bool Fraction::operator> (float num) const{
+
+        return false;
+    }
+
+    bool operator> (float num ,const Fraction& other_fraction){
+
+        return false;
+    }
+
+
 
 
     bool Fraction::operator< (const Fraction& other_fraction) const{
@@ -123,17 +171,52 @@ namespace ariel{
         return false;
     }
 
+    bool Fraction::operator< (float num) const{
+
+        return false;
+    }
+
+    bool operator< (float num ,const Fraction& other_fraction){
+
+        return false;
+    }
+
+
+
+
 
     bool Fraction::operator>= (const Fraction& other_fraction) const{
 
         return false;
     }
 
+    bool Fraction::operator>= (float num) const{
+
+        return false;
+    }
+
+    bool operator>= (float num ,const Fraction& other_fraction){
+
+        return false;
+    }
+
+
 
     bool Fraction::operator<= (const Fraction& other_fraction) const{
 
         return false;
     }
+
+    bool Fraction::operator<= (float num) const{
+
+        return false;
+    }
+
+    bool operator<= (float num ,const Fraction& other_fraction){
+
+        return false;
+    }
+
 
 
     // postfix (n++)
@@ -167,6 +250,7 @@ namespace ariel{
 
 
     std::ostream& operator<< (std::ostream& output, const Fraction& fraction){
+        output << fraction.numerator << "/" << fraction.denominator;
         return output;
     }
 

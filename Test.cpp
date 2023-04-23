@@ -18,19 +18,32 @@ TEST_CASE("Checking set function change the Fraction"){
 
     Fraction a(2,5);
 
-    CHECK(a == 2/5);
+    CHECK(a.getNumerator() == 2);
+    CHECK(a.getDenominator() == 5);
 
     a.setNumerator(4);
 
-    CHECK(a == 4/5);
+    CHECK(a.getNumerator() == 4);
+    CHECK(a.getDenominator() == 5);
 
     a.setDenominator(7);
 
-    CHECK(a == 4/7);
+    CHECK(a.getNumerator() == 4);
+    CHECK(a.getDenominator() == 7);
 
     a.setDenominator(6);
 
-    CHECK(a == 2/3);
+    //fraction reduced because 4/6 can be reduced to 2/3
+    CHECK(a.getNumerator() == 2);
+    CHECK(a.getDenominator() == 3);
+
+    a.setNumerator(0);
+
+    CHECK(a.getNumerator() == 0);
+    CHECK(a.getDenominator() == 3);
+
+    // Checking throw error when set denominator to 0
+    CHECK_THROWS(a.setDenominator(0));
 }
 
 
@@ -38,28 +51,45 @@ TEST_CASE("Checking the fraction is most reduced"){
 
     Fraction a(3,6);
 
-    CHECK(a == 3/6);
+    // ????????????? nned to be reduce right away or no?
+    CHECK(a.getNumerator() == 1);
+    CHECK(a.getDenominator() == 2);
 
     a.setNumerator(4);
 
-    CHECK(a == 2/3);
+    //fraction reduced because 4/6 can be reduced to 2/3
+    CHECK(a.getNumerator() == 2);
+    CHECK(a.getDenominator() == 1);
+
+    a.setDenominator(4);
+
+    //fraction reduced because 2/4 can be reduced to 1/2
+    CHECK(a.getNumerator() == 1);
+    CHECK(a.getDenominator() == 2);
 
 }
+
 
 TEST_CASE("Checking if operator + and == working successfully"){
 
     Fraction a(1,4);
     Fraction b(1,2);
 
-    CHECK(a+b == 3/4);
+    Fraction c = a+b;
 
-    CHECK(a+2.3 == 2.55);
+    CHECK(c.getNumerator() == 3);
+    CHECK(c.getDenominator() == 4);
 
-    Fraction c(1,2);
+    Fraction d = a + 2.3;
 
-    CHECK(b+c == 1);
+    CHECK(d.getNumerator() == 51);
+    CHECK(d.getDenominator() == 20);
 
-    CHECK(2.5+c == 3);
+    Fraction e(1,2);
+
+    CHECK(b+e == Fraction(1,1));
+
+    CHECK(2.5+e == Fraction(3,1));
 
 
 }
@@ -70,15 +100,17 @@ TEST_CASE("Checking if operator - and == working successfully"){
     Fraction a(1,4);
     Fraction b(1,2);
 
-    CHECK(a-b == -1/4);
+    Fraction result(-1,4);
 
-    CHECK(2.3-b == 1.8);
+    CHECK(a-b == result);
+
+    CHECK(2.3-b == Fraction(9,5));
 
     Fraction c(1,2);
 
-    CHECK(b-c == 0);
+    CHECK(b-c == Fraction(0,1));
 
-    CHECK(c-2.5 == -2);
+    CHECK(c-2.5 == Fraction(-2,1));
 }
 
 
@@ -87,20 +119,20 @@ TEST_CASE("Checking if operator * and == working successfully"){
     Fraction a(1,4);
     Fraction b(1,2);
 
-    CHECK(a*b == 1/8);
+    CHECK(a*b == Fraction(1,8));
 
     a.setNumerator(3);
     a.setDenominator(5);
 
-    CHECK(a*b == 3/10);
+    CHECK(a*b == Fraction(3,10));
 
-    CHECK(2.3*b == 1.15);
+    CHECK(2.3*b == Fraction(23,20));
 
     Fraction c(1,2);
 
-    CHECK(b*c == 1/4);
+    CHECK(b*c == Fraction(1,4));
 
-    CHECK(c*2.5 == 1.25);
+    CHECK(c*2.5 == Fraction(5,4));
 }
 
 
@@ -109,39 +141,41 @@ TEST_CASE("Checking if operator / and == working successfully"){
     Fraction a(1,4);
     Fraction b(1,2);
 
-    CHECK(a/b == 1/2);
+    CHECK(a/b == Fraction(1,2));
 
-    CHECK(2.3/a == 0.575);
+    CHECK(2.3/a == Fraction(46,5));
 
     Fraction c(1,2);
 
-    CHECK(b/c == 1);
+    CHECK(b/c == Fraction(1,1));
 
-    CHECK(c/2.5 == 1/5);
+    CHECK(c/2.5 == Fraction(1,5));
 }
 
 
 TEST_CASE("Checking if operator ++ and operator -- working successfully "){
 
-    Fraction a(1/2);
+    Fraction a(1,2);
     Fraction b(3,5);
 
+    CHECK(a++ == Fraction(1,2));
+
     Fraction c = a++;
-    CHECK(c == 1/2);
-    CHECK(a == 3/2);
+    CHECK(c == Fraction(3,2));
+    CHECK(a == Fraction(5,2));
 
     Fraction d = ++b;
-    CHECK(d == 8/5);
-    CHECK(b == 8/5);
+    CHECK(d == Fraction(8,5));
+    CHECK(b == Fraction(8,5));
 
 
     Fraction h = a--;
-    CHECK(h == 3/2);
-    CHECK(a ==1/2);
+    CHECK(h == Fraction(5,2));
+    CHECK(a == Fraction(3,2));
 
     Fraction k = --b;
-    CHECK(k == 3/5);
-    CHECK(b == 3/5);
+    CHECK(k == Fraction(3,5));
+    CHECK(b == Fraction(3,5));
 
 
 }
